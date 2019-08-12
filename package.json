@@ -1,0 +1,19 @@
+{
+  "name": "oslicense",
+  "version": "0.0.1",
+  "description": "A simple helper tool to retrieve Open Source Initiative-approved licenses.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "open",
+    "source",
+    "initiative",
+    "osi",
+    "license",
+    "licenses"
+  ],
+  "author": "credwards27",
+  "license": "MIT"
+}
