@@ -9,18 +9,16 @@
 "use strict";
 
 // Dependencies.
-const cheerio = require("cheerio"),
-    https = require("https"),
+const https = require("https"),
     
     // API URLs and endpoint fragments.
     API = {
         root: "https://api.opensource.org/",
+        rootText: "https://raw.githubusercontent.com/OpenSourceOrg/licenses/" +
+            "master/texts/plain/",
         license: "license/",
         licenses: "licenses/"
-    },
-    
-    // DOM selector to extract license text.
-    DOM_NODE_SELECTOR = "#LicenseText";
+    };
 
 /* Gets a list of all OSI licenses.
     
@@ -106,33 +104,19 @@ async function getLicenseText(license) {
     }
     
     return new Promise((res, rej) => {
-        let versions = (license.text && license.text instanceof Array) ?
-            license.text : null,
-            version;
-        
-        if (null === versions) {
-            rej("No license text found");
-        }
-        
-        version = versions[0];
-        
-        https.get(version.url, (req) => {
-            let html = "";
+        https.get(API.rootText + license.id, (req) => {
+            let text = "";
             
             req.on("data", (chunk) => {
-                html += chunk;
+                text += chunk;
             });
             
             req.on("end", () => {
-                let $ = cheerio.load(html),
-                    node = $(DOM_NODE_SELECTOR);
-                
-                if (!node.length) {
-                    rej("License text was not found, license object is " +
-                        "malformed and/or scraper may be out of date");
+                if (200 !== req.statusCode) {
+                    rej(`License text not found for '${license.id}'`);
                 }
                 
-                res(node.text().trim());
+                res(text.trim());
             });
         });
     });

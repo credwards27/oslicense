@@ -13,6 +13,8 @@
     "open",
     "source",
     "initiative",
+    "opensource",
+    "opensourceinitiative",
     "osi",
     "license",
     "licenses"
@@ -20,7 +22,6 @@
   "author": "credwards27",
   "license": "MIT",
   "dependencies": {
-    "cheerio": "^1.0.0-rc.3",
     "minimist": "~1.2.5",
     "minimist-options": "~4.1.0"
   }

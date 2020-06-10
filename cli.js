@@ -138,25 +138,13 @@ async function generateLicense(text, filePath) {
         text += "\n";
     }
     catch (e) {
-        let errors = e.errors;
-        
-        if (errors instanceof Array) {
-            for (let i=0, l=errors.length; i<l; ++i) {
-                let err = errors[i];
-                console.error(err.message ? err.message : err);
-            }
-        }
-        else {
-            console.error(errors);
-        }
-        
+        console.log(e);
         return;
     }
     
     // Output directly, or generate a license file
     if (ARGS.stdout) {
         process.stdout.write(text);
-        
         return;
     }
     
@@ -165,7 +153,6 @@ async function generateLicense(text, filePath) {
     }
     catch (e) {
         console.error(e);
-        
         return;
     }
     
