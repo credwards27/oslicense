@@ -20,15 +20,6 @@ const osl = require("./oslicense"),
     
     // Arguments configuration.
     ARG_OPTS = {
-        // OSI license identifier (case-sensitive). If not specified, the
-        // license specified in the nearest package.json file will be used. If
-        // the nearest package.json file does not contain a license property, or
-        // if no package.json file is found, then the license defaults to MIT.
-        license: {
-            type: "string",
-            alias: "l"
-        },
-        
         // Optional alternate file name/path for the generated license file.
         output: {
             type: "string",
@@ -86,7 +77,7 @@ async function generateLicense(text, filePath) {
 }
 
 ;(async () => {
-    let license = ARGS.license || ARGS._[0],
+    let license = ARGS._[0],
         text, licenseFile;
     
     if (!license) {
