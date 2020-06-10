@@ -58,18 +58,30 @@ const osl = require("./oslicense"),
     some reason.
 */
 async function generateLicense(text, filePath) {
+    let defaultFile = "LICENSE.md";
+    
     text = typeof text === "string" ? text : "";
     
     if (!filePath) {
-        filePath = "LICENSE.md";
+        filePath = defaultFile;
     }
     
     filePath = path.resolve(filePath);
     
     return new Promise(async (res, rej) => {
-        if (fs.existsSync(filePath)) {
-            rej(`License file already exists at '${filePath}'`);
+        try {
+            // Check if path already exists and whether or not it is a directory
+            let stat = fs.statSync(filePath);
+            
+            if (stat.isDirectory()) {
+                filePath += `${SEP}${defaultFile}`;
+            }
+            
+            if (fs.existsSync(filePath)) {
+                rej(`License file already exists at '${filePath}'`);
+            }
         }
+        catch (e) {}
         
         try {
             await writeFileAsync(filePath, text);
