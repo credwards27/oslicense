@@ -14,22 +14,64 @@ const cheerio = require("cheerio"),
     
     // API URLs and endpoint fragments.
     API = {
-        root: "https://api.opensource.org/license/"
+        root: "https://api.opensource.org/",
+        license: "license/",
+        licenses: "licenses/"
     },
     
     // DOM selector to extract license text.
     DOM_NODE_SELECTOR = "#LicenseText";
 
+/* Gets a list of all OSI licenses.
+    
+    Returns a promise that resolves to an object containing all OSI license
+    names, keyed by license IDs.
+*/
+async function getLicenses() {
+    let promise = new Promise((res, rej) => {
+        https.get(API.root + API.licenses, (req) => {
+            let data = "";
+            
+            req.on("data", (chunk) => {
+                data += chunk;
+            });
+            
+            req.on("end", () => {
+                try {
+                    data = JSON.parse(data);
+                }
+                catch (e) {
+                    rej("Invalid response received from the OSI API");
+                }
+                
+                data.errors ? rej(data) : res(data)
+            });
+        });
+    });
+    
+    return promise.then((val) => {
+        let licenses = {};
+        
+        for (let i=0, l=val.length; i<l; ++i) {
+            let curr = val[i];
+            
+            licenses[curr.id] = curr.name;
+        }
+        
+        return licenses;
+    });
+}
+
 /* Gets a license by license ID.
     
-    id - License ID (case sensitive).
+    id - License ID string (case sensitive).
     
     Returns a promise that resolves to an OSI license information object
     containing response data from the API.
 */
 async function getLicenseData(id) {
     return new Promise((res, rej) => {
-        https.get(API.root + id, (req) => {
+        https.get(API.root + API.license + id, (req) => {
             let data = "";
             
             req.on("data", (chunk) => {
@@ -52,7 +94,8 @@ async function getLicenseData(id) {
 
 /* Gets license text from an OSI license information object.
     
-    license - OSI license information object (see getLicenseData()).
+    license - OSI license information object or license ID string (see
+        getLicenseData()).
     
     Returns a promise that resolves to license text from the provided OSI
     license information object.
@@ -96,6 +139,7 @@ async function getLicenseText(license) {
 }
 
 module.exports = {
+    getLicenses: getLicenses,
     getLicenseData: getLicenseData,
     getLicenseText: getLicenseText
 };

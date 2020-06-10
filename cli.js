@@ -20,6 +20,12 @@ const osl = require("./oslicense"),
     
     // Arguments configuration.
     ARG_OPTS = {
+        // Lists available licenses with associated IDs.
+        list: {
+            type: "boolean",
+            alias: "l"
+        },
+        
         // Optional alternate file name/path for the generated license file.
         output: {
             type: "string",
@@ -79,6 +85,34 @@ async function generateLicense(text, filePath) {
 ;(async () => {
     let license = ARGS._[0],
         text, licenseFile;
+    
+    if (ARGS.list) {
+        // Get list of available licenses
+        let list, order;
+        
+        try {
+            list = await osl.getLicenses();
+        }
+        catch (e) {
+            console.log(e);
+            return;
+        }
+        
+        order = Object.keys(list).sort((a, b) => {
+            return a.toLowerCase().localeCompare(b.toLowerCase());
+        });
+        
+        console.log("Available licenses:\n");
+        
+        for (let i=0, l=order.length; i<l; ++i) {
+            let id = order[i];
+            
+            console.log(`${id}:`);
+            console.log(`    ${list[id]}`);
+        }
+        
+        return;
+    }
     
     if (!license) {
         // Attempt to get license type from local package.json
