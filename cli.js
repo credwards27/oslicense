@@ -20,6 +20,12 @@ const osl = require("./oslicense"),
     
     // Arguments configuration.
     ARG_OPTS = {
+        // Shows CLI help text.
+        help: {
+            type: "boolean",
+            alias: "h"
+        },
+        
         // Lists available licenses with associated IDs.
         list: {
             type: "boolean",
@@ -94,7 +100,22 @@ async function generateLicense(text, filePath) {
     });
 }
 
+/* Shows help text and exits.
+*/
+function showHelp() {
+    let text = fs.readFileSync(__dirname + "/help.txt", {
+        encoding: "utf8"
+    });
+    
+    console.error(text.trim());
+    process.exit();
+}
+
 ;(async () => {
+    if (ARGS.help) {
+        showHelp();
+    }
+    
     let license = ARGS._[0],
         text, licenseFile;
     

@@ -1,0 +1,66 @@
+OSLICENSE(1)
+
+NAME
+    oslicense - Generates license files and retrieves license text and
+        information.
+
+SYNOPSIS
+    oslicense [--help] [<args>] [<license-id>]
+
+DESCRIPTION
+    Retrieves license text from Open Source Initiative and saves it to a license
+    file or prints it to the console.
+    
+    The saved license file may have placeholders for license holder names,
+    dates, etc. that will need to be replaced manually.
+
+OPTIONS
+    <license-id>
+        Specifying <license-id> will retrieve the text for that license, if the
+        license ID matches an Open Source Initiative license. To show a list of
+        all available licenses and IDs, use the --list option.
+        
+        If <license-id> is omitted, the nearest package.json file will be used
+        to specify the license ID, starting in the current working directory and
+        checking parent directories. If a package.json file is found AND it
+        contains a 'license' property, the 'license' value will be used for
+        <license-id>.
+    
+    -h, --help
+        Show this help text.
+    
+    -l, --list
+        Lists all available OSI license names and IDs.
+        
+        Example:
+            
+            License-ID-01:
+                License 01 Name
+            
+            License-ID-02:
+                License 02 Name
+        
+        The license IDs returned in this list can be used for the <license-id>
+        argument.
+    
+    -o, --output <path>
+    <path>
+        Specifies an alternate output file name and/or directory for the
+        generated license file. Relative paths are relative to the current
+        working directory.
+        
+        Without this argument, a license file named "LICENSE.md" will be created
+        in the current working directory.
+        
+        If <path> is a name that does not exist (in a directory that does
+        already exist), then the license file will use that name instead.
+        
+        If <path> is a directory, the license file will be created in that
+        directory using the default file name, "LICENSE.md".
+        
+        If <path> is a file that already exists, or is in a directory that does
+        not exist, then the script will return an error.
+    
+    -s, --stdout
+        If specified, the license text will be printed to stdout instead of
+        being saved to a file.
