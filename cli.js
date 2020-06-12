@@ -127,7 +127,7 @@ function showHelp() {
             list = await osl.getLicenses();
         }
         catch (e) {
-            console.log(e);
+            console.error(e);
             return;
         }
         
@@ -171,7 +171,7 @@ function showHelp() {
         text += "\n";
     }
     catch (e) {
-        console.log(e);
+        console.error(e);
         return;
     }
     
