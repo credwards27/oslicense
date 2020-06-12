@@ -1,8 +1,11 @@
 {
   "name": "oslicense",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simple helper tool to retrieve Open Source Initiative-approved licenses.",
   "main": "oslicense.js",
+  "engines": {
+    "node": ">=8.0.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,6 +24,12 @@
   ],
   "author": "credwards27",
   "license": "MIT",
+  "homepage": "https://github.com/credwards27/oslicense#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/credwards27/oslicense.git"
+  },
+  "bugs": "https://github.com/credwards27/oslicense/issues",
   "dependencies": {
     "minimist": "~1.2.5",
     "minimist-options": "~4.1.0"
