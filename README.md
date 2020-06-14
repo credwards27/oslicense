@@ -28,7 +28,7 @@ oslicense [<args>] [<license-id>]
 
 Automatically generates a license file (`'LICENSE.md'`) or outputs license text for a given OSI license ID. If a `package.json` file with a `license` property is present, that license ID will be used. `package.json` lookup will start with the current working directory, checking all parent directories until a `package.json` file is found.
 
-The `<license-id>` argument must match one of the license IDs returned using the `--list` flag.
+The `<license-id>` argument (case-sensitive) must match one of the license IDs returned using the `--list` flag.
 
 The generated license file may have placeholders for license holder names, dates, etc. that will need to be replaced manually.
 
