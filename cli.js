@@ -148,20 +148,12 @@ function showHelp() {
     }
     
     if (!license) {
-        // Attempt to get license type from local package.json
-        let dirs = process.cwd().split(SEP);
+        license = osl.getNearestLicense();
         
-        while (dirs.length) {
-            let config = dirs.join(SEP) + SEP + "package.json";
-            
-            if (fs.existsSync(config)) {
-                license = require(config);
-                license = license.license || "MIT";
-                
-                break;
-            }
-            
-            dirs.pop();
+        if (!license) {
+            console.error("No package.json file found with a valid 'license' " +
+                "property");
+            return;
         }
     }
     

@@ -10,6 +10,8 @@
 
 // Dependencies.
 const https = require("https"),
+    fs = require("fs"),
+    path = require("path"),
     
     // API URLs and endpoint fragments.
     API = {
@@ -84,7 +86,20 @@ async function getLicenseData(id) {
                     rej("Invalid response received from the OSI API");
                 }
                 
-                data.errors ? rej(data) : res(data);
+                if (data.errors) {
+                    // Consolidate error messages from API
+                    let messages = data.errors.map((err) => {
+                        return err ? (err.message || "") : "";
+                    }).filter((msg) => { return !!msg; });
+                    
+                    rej(
+                        messages.filter((msg) => {
+                            return !!msg;
+                        }).join("\n")
+                    );
+                }
+                
+                res(data);
             });
         });
     });
@@ -104,6 +119,10 @@ async function getLicenseText(license) {
     }
     
     return new Promise((res, rej) => {
+        if (!license || typeof license.id !== "string") {
+            rej("Invalid license object or ID provided");
+        }
+        
         https.get(API.rootText + license.id, (req) => {
             let text = "";
             
@@ -122,8 +141,49 @@ async function getLicenseText(license) {
     });
 }
 
+/* Gets the license ID from the nearest package.json file. This will check for a
+    license property in package.json files in the following order:
+        
+        - In the current working directory
+        - In the current working directory path's ancestor chain, starting with
+          the parent directory
+    
+    If a package.json file is found, but it does not contain a 'license'
+    property, the next directory will be checked until all directories have been
+    checked.
+    
+    Returns the license ID string from the nearest package.json file relative
+    to the current working directory. If no 'license' property is found in a
+    package.json file, this will return undefined.
+*/
+function getNearestLicense() {
+    // Attempt to get license type from local package.json
+    let sep = path.sep,
+        dirs = process.cwd().split(sep);
+    
+    while (dirs.length) {
+        let config = dirs.join(sep) + `${sep}package.json`;
+        
+        if (fs.existsSync(config)) {
+            try {
+                // Parse the file safely
+                let file = fs.readFileSync(config, "utf8"),
+                    data = JSON.parse(file);
+                
+                if (typeof data.license === "string") {
+                    return data.license;
+                }
+            }
+            catch (e) {}
+        }
+        
+        dirs.pop();
+    }
+}
+
 module.exports = {
     getLicenses: getLicenses,
     getLicenseData: getLicenseData,
-    getLicenseText: getLicenseText
+    getLicenseText: getLicenseText,
+    getNearestLicense: getNearestLicense
 };
