@@ -78,9 +78,15 @@ const osl = require("oslicense");
         // Get license text for a specific license ID or license object from
         // getLicenseData()
         console.log(await osl.getLicenseText("MIT"));
+        
+        // Gets the 'license' property value from the nearest package.json file
+        // relative to the current working directory
+        console.log(osl.getNearestLicense());
     }
     catch (e) {
         console.error(e);
     }
 })();
 ```
+
+For more detailed usage information, refer to the documentation in `oslicense.js`
