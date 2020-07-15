@@ -42,6 +42,12 @@ const osl = require("./oslicense"),
         stdout: {
             type: "boolean",
             alias: "s"
+        },
+        
+        // Shows the package version.
+        version: {
+            type: "boolean",
+            alias: "v"
         }
     },
     
@@ -114,6 +120,13 @@ function showHelp() {
 ;(async () => {
     if (ARGS.help) {
         showHelp();
+    }
+    
+    if (ARGS.version) {
+        let pkg = require("./package.json");
+        
+        console.log(pkg.version);
+        process.exit();
     }
     
     let license = ARGS._[0],
