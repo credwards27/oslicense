@@ -38,6 +38,10 @@ The generated license file may have placeholders for license holder names, dates
 
 Shows CLI help text.
 
+### -v, --version
+
+Shows the package version number.
+
 ### -l, --list
 
 Lists all available OSI licenses and license IDs.

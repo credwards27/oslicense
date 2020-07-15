@@ -113,7 +113,7 @@ function showHelp() {
         encoding: "utf8"
     });
     
-    console.error(text.trim());
+    console.log(text.trim());
     process.exit();
 }
 

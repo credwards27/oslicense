@@ -29,6 +29,9 @@ OPTIONS
     -h, --help
         Show this help text.
     
+    -v, --version
+        Shows the package version number.
+    
     -l, --list
         Lists all available OSI license names and IDs.
         
