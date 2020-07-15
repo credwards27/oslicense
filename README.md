@@ -58,7 +58,7 @@ Specifies an alternate output file name and/or directory for the generated licen
 
 If `<path>` is a directory, then the license file will be created with the default file name in the directory.
 
-### -s, ---stdout
+### -s, --stdout
 
 Prints license text to stdout instead of generating a license file. If specified, the `--output` flag will be ignored.
 
