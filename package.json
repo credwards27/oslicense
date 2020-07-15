@@ -1,6 +1,6 @@
 {
   "name": "oslicense",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A simple helper tool to retrieve Open Source Initiative-approved licenses.",
   "main": "oslicense.js",
   "engines": {
