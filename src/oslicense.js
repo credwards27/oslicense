@@ -9,18 +9,18 @@
 "use strict";
 
 // Dependencies.
-const https = require("https"),
-    fs = require("fs"),
-    path = require("path"),
-    
-    // API URLs and endpoint fragments.
-    API = {
-        root: "https://api.opensource.org/",
-        rootText: "https://raw.githubusercontent.com/OpenSourceOrg/licenses/" +
-            "master/texts/plain/",
-        license: "license/",
-        licenses: "licenses/"
-    };
+import https from "https";
+import { existsSync, readFileSync } from "fs";
+import path from "path";
+
+// API URLs and endpoint fragments.
+const API = {
+    root: "https://api.opensource.org/",
+    rootText: "https://raw.githubusercontent.com/OpenSourceOrg/licenses/" +
+        "master/texts/plain/",
+    license: "license/",
+    licenses: "licenses/"
+};
 
 /* Gets a list of all OSI licenses.
     
@@ -71,7 +71,7 @@ async function getLicenses() {
 */
 async function getLicenseData(id) {
     return new Promise((res, rej) => {
-        https.get(API.root + API.license + id, (req) => {
+        https.get(`${API.root}${API.license}${id}`, (req) => {
             let data = "";
             
             req.on("data", (chunk) => {
@@ -123,7 +123,7 @@ async function getLicenseText(license) {
             rej("Invalid license object or ID provided");
         }
         
-        https.get(API.rootText + license.id, (req) => {
+        https.get(`${API.rootText}${license.id}`, (req) => {
             let text = "";
             
             req.on("data", (chunk) => {
@@ -164,10 +164,10 @@ function getNearestLicense() {
     while (dirs.length) {
         let config = dirs.join(sep) + `${sep}package.json`;
         
-        if (fs.existsSync(config)) {
+        if (existsSync(config)) {
             try {
                 // Parse the file safely
-                let file = fs.readFileSync(config, "utf8"),
+                let file = readFileSync(config, "utf8"),
                     data = JSON.parse(file);
                 
                 if (typeof data.license === "string") {
@@ -181,7 +181,7 @@ function getNearestLicense() {
     }
 }
 
-module.exports = {
+export default {
     getLicenses: getLicenses,
     getLicenseData: getLicenseData,
     getLicenseText: getLicenseText,

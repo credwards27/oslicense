@@ -8,15 +8,16 @@
 "use strict";
 
 // Dependencies.
-const osl = require("./oslicense"),
-    minimist = require("minimist"),
-    minimistOpts = require("minimist-options"),
-    
-    promisify = require("util").promisify,
-    fs = require("fs"),
-    path = require("path"),
-    
-    writeFileAsync = promisify(fs.writeFile),
+import osl from "#app/oslicense";
+import minimist from "minimist";
+import minimistOpts from "minimist-options";
+import { fileURLToPath } from "url";
+import { statSync, existsSync, readFileSync } from "fs";
+import { writeFile } from "fs/promises";
+import path from "path";
+
+// ES6 module __dirname.
+const __dirname = path.dirname(fileURLToPath(import.meta.url)),
     
     // Arguments configuration.
     ARG_OPTS = {
@@ -83,20 +84,20 @@ async function generateLicense(text, filePath) {
     return new Promise(async (res, rej) => {
         try {
             // Check if path already exists and whether or not it is a directory
-            let stat = fs.statSync(filePath);
+            let stat = statSync(filePath);
             
             if (stat.isDirectory()) {
                 filePath += `${SEP}${defaultFile}`;
             }
             
-            if (fs.existsSync(filePath)) {
+            if (existsSync(filePath)) {
                 rej(`License file already exists at '${filePath}'`);
             }
         }
         catch (e) {}
         
         try {
-            await writeFileAsync(filePath, text);
+            await writeFile(filePath, text);
         }
         catch (e) {
             rej(`License file could not be written at '${filePath}'`);
@@ -109,7 +110,7 @@ async function generateLicense(text, filePath) {
 /* Shows help text and exits.
 */
 function showHelp() {
-    let text = fs.readFileSync(__dirname + "/help.txt", {
+    let text = readFileSync(`${__dirname}/help.txt`, {
         encoding: "utf8"
     });
     
@@ -123,7 +124,11 @@ function showHelp() {
     }
     
     if (ARGS.version) {
-        let pkg = require("./package.json");
+        let pkg = readFileSync(`${__dirname}/package.json`, {
+            encoding: "utf8"
+        });
+        
+        pkg = JSON.parse(pkg);
         
         console.log(pkg.version);
         process.exit();
