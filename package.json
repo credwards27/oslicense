@@ -5,8 +5,8 @@
   "main": "src/oslicense.js",
   "type": "module",
   "imports": {
-      "#app/*": "./src/*.js",
-      "#root/*": "./*.js"
+    "#app/*": "./src/*.js",
+    "#root/*": "./*.js"
   },
   "engines": {
     "node": ">=14.6.0"
@@ -36,7 +36,7 @@
   },
   "bugs": "https://github.com/credwards27/oslicense/issues",
   "dependencies": {
-    "minimist": "~1.2.5",
+    "minimist": "~1.2.6",
     "minimist-options": "~4.1.0"
   }
 }
